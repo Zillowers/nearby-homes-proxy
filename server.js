@@ -3,33 +3,27 @@ const httpProxy = require('http-proxy');
 const port = 8080;
 
 const apiProxy = httpProxy.createProxyServer();
-const serverOne = 'http://localhost:3000';  //serves mortgage calculator
-const serverTwo = 'http://localhost:3001';  //serves home description
-const serverThree = 'http://localhost:3002'; //serves image carousel
-const serverFour = 'http://localhost:3003'; //serves nearby homes
+const serverOne = 'http://htlin.io';  //serves mortgage calculator
+const serverTwo = 'http://sdcloadbalancer-369030579.us-east-1.elb.amazonaws.com';  //serves home description
+const serverThree = 'http://52.15.91.9'; //serves image carousel
+const serverFour = 'http://13.56.254.51'; //serves nearby homes
 
 const app = express();
+app.use('/homes/:id', express.static('./public') );
 
-app.use(express.static('./public'));
-
-app.all("/api/homes/1/prices", function(req, res) {
- console.log('redirecting to Server1');
+app.all(`/api/homes/:id/prices`, function(req, res) {
  apiProxy.web(req, res, {target: serverOne});
 });
 
-app.all("/api/homes/:index/detail-information", function(req, res) {
- console.log('redirecting to Server2');
+app.all("/homes/:id/detail-information", function(req, res) {
  apiProxy.web(req, res, {target: serverTwo});
 });
 
-app.all("/images/:houseID", function(req, res) {
-  console.log('req-body', req.body)
- console.log('redirecting to Server3');
+app.all("/homes/:id/images", function(req, res) {
  apiProxy.web(req, res, {target: serverThree});
 });
 
-app.all("/nearbyHomes", function(req, res) {
- console.log('redirecting to Server4');
+app.all(`/homes/:id/nearbyHomes`, function(req, res) {
  apiProxy.web(req, res, {target: serverFour});
 });
 
