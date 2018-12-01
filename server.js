@@ -11,7 +11,7 @@ const serverFour = 'http://13.56.254.51'; //serves nearby homes
 const app = express();
 app.use('/homes/:id', express.static('./public') );
 
-app.all(`/api/homes/:id/prices`, function(req, res) {
+app.all("/homes/:id/prices", function(req, res) {
  apiProxy.web(req, res, {target: serverOne});
 });
 
@@ -23,7 +23,7 @@ app.all("/homes/:id/images", function(req, res) {
  apiProxy.web(req, res, {target: serverThree});
 });
 
-app.all(`/homes/:id/nearbyHomes`, function(req, res) {
+app.all("/homes/:id/nearbyHomes", function(req, res) {
  apiProxy.web(req, res, {target: serverFour});
 });
 
